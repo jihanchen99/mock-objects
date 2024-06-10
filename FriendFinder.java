@@ -20,8 +20,13 @@ public class FriendFinder {
 	 * who is taking the same classes as that student.
 	 */
 	public Set<String> findClassmates(Student theStudent) {
-		
+		if (theStudent == null) {
+			throw new IllegalArgumentException();
+		}
 		String name = theStudent.getName();
+		if (name == null) {
+			throw new IllegalStateException();
+		}
 		
 		// find the classes that this student is taking
 		List<String> myClasses = classesDataSource.getClasses(name);
@@ -33,14 +38,23 @@ public class FriendFinder {
 		Set<String> classmates = new HashSet<String>();
 		
 		for (String myClass : myClasses) {
+			if (myClass == null) {
+				continue;
+			}
 			// list all the students in the class
 			List<Student> students = studentsDataSource.getStudents(myClass);
-			
+			if (students == null) {
+				continue;
+			}
 			for (Student otherStudent : students) {
-				
+				if (otherStudent == null) {
+					continue;
+				}
 				// find the other classes that they're taking
 				List<String> theirClasses = classesDataSource.getClasses(otherStudent.getName());
-							
+				if (theirClasses == null) {
+					continue;
+				}
 				// see if all of the classes that they're taking are the same as the ones this student is taking
 				boolean allSame = true;
 				for (String c : myClasses) {
